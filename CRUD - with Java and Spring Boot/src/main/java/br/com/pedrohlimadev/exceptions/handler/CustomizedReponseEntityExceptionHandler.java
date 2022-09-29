@@ -1,7 +1,7 @@
 package br.com.pedrohlimadev.exceptions.handler;
 
 import br.com.pedrohlimadev.exceptions.ExcepetionsResponse;
-import br.com.pedrohlimadev.exceptions.ResourceCustomizeException;
+import br.com.pedrohlimadev.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,14 +27,14 @@ public class CustomizedReponseEntityExceptionHandler extends ResponseEntityExcep
         return new ResponseEntity<>(excepetionsResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(ResourceCustomizeException.class)
-    public final ResponseEntity<ExcepetionsResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExcepetionsResponse> handleNotFoundExceptions(Exception ex, WebRequest request) {
         ExcepetionsResponse excepetionsResponse = new ExcepetionsResponse(
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
 
-        return new ResponseEntity<>(excepetionsResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(excepetionsResponse, HttpStatus.NOT_FOUND);
     }
 
 }

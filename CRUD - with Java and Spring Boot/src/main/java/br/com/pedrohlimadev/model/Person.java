@@ -1,11 +1,7 @@
 package br.com.pedrohlimadev.model;
 
 
-
-
-
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
