@@ -32,7 +32,6 @@ public class PersonService {
         return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
-
     public PersonVO findById(Long id) {
         logger.info("Finding one person!");
 
