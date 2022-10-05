@@ -1,6 +1,7 @@
 package br.com.pedrohlimadev.exceptions.handler;
 
 import br.com.pedrohlimadev.exceptions.ExcepetionsResponse;
+import br.com.pedrohlimadev.exceptions.RequiredObjectIsNullException;
 import br.com.pedrohlimadev.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,15 @@ public class CustomizedReponseEntityExceptionHandler extends ResponseEntityExcep
                 request.getDescription(false));
 
         return new ResponseEntity<>(excepetionsResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(RequiredObjectIsNullException.class)
+    public final ResponseEntity<ExcepetionsResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+        ExcepetionsResponse excepetionsResponse = new ExcepetionsResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(excepetionsResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
