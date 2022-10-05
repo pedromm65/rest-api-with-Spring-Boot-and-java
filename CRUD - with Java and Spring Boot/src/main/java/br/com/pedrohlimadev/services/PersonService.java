@@ -11,7 +11,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import java.util.logging.Logger;
@@ -40,8 +39,6 @@ public class PersonService {
 
         PersonVO person = new PersonVO();
 
-
-
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
@@ -52,6 +49,9 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
+
+        if(person == null) throw new ResourceNotFoundException("TA FALTANDO");
+
         logger.info("Creating one person!");
 
         var entity = DozerMapper.parseObject(person, Person.class);
