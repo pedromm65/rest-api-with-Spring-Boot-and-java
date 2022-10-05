@@ -2,6 +2,7 @@ package br.com.pedrohlimadev.services;
 
 import br.com.pedrohlimadev.controllers.PersonController;
 import br.com.pedrohlimadev.data.vo.v1.PersonVO;
+import br.com.pedrohlimadev.exceptions.RequiredObjectIsNullException;
 import br.com.pedrohlimadev.exceptions.ResourceNotFoundException;
 import br.com.pedrohlimadev.mapper.DozerMapper;
 import br.com.pedrohlimadev.model.Person;
@@ -50,7 +51,7 @@ public class PersonService {
 
     public PersonVO create(PersonVO person) {
 
-        if(person == null) throw new ResourceNotFoundException("TA FALTANDO");
+        if(person == null) throw new RequiredObjectIsNullException();
 
         logger.info("Creating one person!");
 
