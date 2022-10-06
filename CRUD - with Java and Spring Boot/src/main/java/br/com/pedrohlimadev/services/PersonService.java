@@ -38,8 +38,6 @@ public class PersonService {
     public PersonVO findById(Long id) {
         logger.info("Finding one person!");
 
-        PersonVO person = new PersonVO();
-
         var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
