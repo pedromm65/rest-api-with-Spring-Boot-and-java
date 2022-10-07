@@ -3,6 +3,7 @@ package br.com.pedrohlimadev.services;
 
 import br.com.pedrohlimadev.controllers.BookControllers;
 import br.com.pedrohlimadev.data.vo.v1.BookVO;
+import br.com.pedrohlimadev.exceptions.RequiredObjectIsNullException;
 import br.com.pedrohlimadev.exceptions.ResourceNotFoundException;
 import br.com.pedrohlimadev.mapper.DozerMapper;
 import br.com.pedrohlimadev.model.Book;
@@ -36,6 +37,8 @@ public class BookServices {
     }
 
     public BookVO create(BookVO book) {
+        if(book == null) throw new RequiredObjectIsNullException();
+
         var entity = DozerMapper.parseObject(book, Book.class);
         var vo = DozerMapper.parseObject(repository.save(entity), BookVO.class);
 
@@ -45,6 +48,8 @@ public class BookServices {
     }
 
     public BookVO update(BookVO book) {
+        if(book == null) throw new RequiredObjectIsNullException();
+
         var entity = repository.findById(book.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
