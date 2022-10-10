@@ -1,6 +1,7 @@
 package br.com.pedrohlimadev.exceptions.handler;
 
 import br.com.pedrohlimadev.exceptions.ExcepetionsResponse;
+import br.com.pedrohlimadev.exceptions.InvalidJwtAuthenticationException;
 import br.com.pedrohlimadev.exceptions.RequiredObjectIsNullException;
 import br.com.pedrohlimadev.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,16 @@ public class CustomizedReponseEntityExceptionHandler extends ResponseEntityExcep
                 request.getDescription(false));
 
         return new ResponseEntity<>(excepetionsResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExcepetionsResponse> handleInvalidJwtAuthenticationExceptions(Exception ex, WebRequest request) {
+        ExcepetionsResponse excepetionsResponse = new ExcepetionsResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(excepetionsResponse, HttpStatus.FORBIDDEN);
     }
 
 }
