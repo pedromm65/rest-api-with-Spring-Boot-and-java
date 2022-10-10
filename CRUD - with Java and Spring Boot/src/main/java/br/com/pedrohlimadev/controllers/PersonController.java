@@ -1,7 +1,7 @@
 package br.com.pedrohlimadev.controllers;
 
 import br.com.pedrohlimadev.data.vo.v1.PersonVO;
-import br.com.pedrohlimadev.services.PersonService;
+import br.com.pedrohlimadev.services.PersonServices;
 import br.com.pedrohlimadev.util.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -21,7 +21,7 @@ import java.util.List;
 public class PersonController {
 
     @Autowired
-    private PersonService service;
+    private PersonServices service;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON,
             MediaType.APPLICATION_XML,

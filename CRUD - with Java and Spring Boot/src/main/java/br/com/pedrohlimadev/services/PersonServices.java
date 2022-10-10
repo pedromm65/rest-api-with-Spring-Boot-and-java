@@ -18,9 +18,9 @@ import java.util.logging.Logger;
 
 
 @Service
-public class PersonService {
+public class PersonServices {
 
-    private final Logger logger = Logger.getLogger(PersonService.class.getName());
+    private final Logger logger = Logger.getLogger(PersonServices.class.getName());
 
 
     @Autowired

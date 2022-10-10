@@ -7,7 +7,7 @@ import br.com.pedrohlimadev.data.vo.v1.PersonVO;
 import br.com.pedrohlimadev.exceptions.RequiredObjectIsNullException;
 import br.com.pedrohlimadev.model.Person;
 import br.com.pedrohlimadev.repositories.PersonRepository;
-import br.com.pedrohlimadev.services.PersonService;
+import br.com.pedrohlimadev.services.PersonServices;
 import br.com.pedrohlimadev.unittests.mapper.mocks.MockPerson;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +26,12 @@ import java.util.Optional;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-class PersonServiceTest {
+class PersonServicesTest {
 
     MockPerson input;
 
     @InjectMocks
-    private PersonService service;
+    private PersonServices service;
 
     @Mock
     PersonRepository repository;
