@@ -3,7 +3,6 @@ package br.com.pedrohlimadev.config;
 
 import br.com.pedrohlimadev.security.jwt.JwtConfigurer;
 import br.com.pedrohlimadev.security.jwt.JwtTokenProvider;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +14,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        Map<String, PasswordEncoder> encoders = new HashedMap();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
         DelegatingPasswordEncoder passwordEncoder =
                 new DelegatingPasswordEncoder("pbkdf2", encoders);
