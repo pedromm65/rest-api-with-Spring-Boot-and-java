@@ -2,7 +2,9 @@ package br.com.pedrohlimadev.integrationtests.controller.withjson;
 
 import br.com.pedrohlimadev.configs.TestConfigs;
 import br.com.pedrohlimadev.integrationtests.testcontainer.AbstractIntegrationTest;
+import br.com.pedrohlimadev.integrationtests.vo.AccountCredentialsVO;
 import br.com.pedrohlimadev.integrationtests.vo.PersonVO;
+import br.com.pedrohlimadev.integrationtests.vo.TokenVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.*;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -39,21 +42,43 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(1)
-    public void testCreate() throws IOException {
-        mockPerson();
+    @Order(0)
+    public void authorization() throws JsonMappingException {
+        AccountCredentialsVO user = new AccountCredentialsVO("leandro", "admin123");
+
+        var accessToken = given()
+                .basePath("/auth/signin")
+                    .port(TestConfigs.SERVER_PORT)
+                    .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .body(user)
+                    .when()
+                        .post()
+                            .then()
+                                .statusCode(200)
+                                    .extract()
+                                    .body()
+                                        .as(TokenVO.class)
+                                    .getAccessToken();
+
 
         specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARM_ORIGIN, TestConfigs.ORIGIN_VALID_CORS)
+                .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
                 .setBasePath("/api/person/v1")
                 .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
 
+    }
+
+    @Test
+    @Order(1)
+    public void testCreate() throws IOException {
+        mockPerson();
 
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_VALID_CORS)
                 .body(person)
                 .when()
                 .post()
@@ -87,17 +112,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     public void testCreateWithInvalidOrigin() throws IOException {
         mockPerson();
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARM_ORIGIN, TestConfigs.ORIGIN_INVALID_CORS)
-                .setBasePath("/api/person/v1")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_INVALID_CORS)
                 .body(person)
                 .when()
                 .post()
@@ -117,17 +134,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     public void testFindById() throws IOException {
         mockPerson();
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARM_ORIGIN, TestConfigs.ORIGIN_VALID_CORS)
-                .setBasePath("/api/person/v1")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_VALID_CORS)
                 .pathParam("id", person.getId())
                 .when()
                 .get("{id}")
@@ -162,17 +171,9 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     public void testFindByIdWithInvalidOrigin() throws IOException {
         mockPerson();
 
-        specification = new RequestSpecBuilder()
-                .addHeader(TestConfigs.HEADER_PARM_ORIGIN, TestConfigs.ORIGIN_INVALID_CORS)
-                .setBasePath("/api/person/v1")
-                .setPort(TestConfigs.SERVER_PORT)
-                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-                .build();
-
-
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_INVALID_CORS)
                 .pathParam("id", person.getId())
                 .when()
                 .get("{id}")
